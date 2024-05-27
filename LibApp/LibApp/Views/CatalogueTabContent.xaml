@@ -1,0 +1,319 @@
+﻿<UserControl x:Class="LibApp.Views.CatalogueTabContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             xmlns:l="clr-namespace:LibApp"
+             xmlns:conv="clr-namespace:LibApp.Converters"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:viewmodels="clr-namespace:LibApp.ViewModels"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             d:DataContext="{d:DesignInstance Type=viewmodels:CatalogueTabVM}"
+             x:Name="ThisTabContent">
+    <DockPanel>
+        <Border DockPanel.Dock="Top" BorderThickness="0,0,0,2" BorderBrush="{StaticResource CLR_DarkDarkViolet}">
+            <DockPanel Background="{StaticResource CLR_LightViolet}">
+                <WrapPanel DockPanel.Dock="Top">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                                Margin="20">
+                        <Label Content="Пошук" Style="{StaticResource WrapLabelStyle}"/>
+                        <TextBox Text="{Binding TextToSearch, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource InputBoxStyle}"
+                                 Width="250"/>
+                    </StackPanel>
+                    <ToggleButton x:Name="ExpandSearchToggleBtn" IsChecked="False"
+                                Style="{StaticResource ExpandSearchToggleBtnStyle}"
+                                  Margin="20"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                            Margin="20">
+                        <Label Content="Спачатку" Style="{StaticResource WrapLabelStyle}"/>
+                        <ComboBox x:Name="CatalogueSortCB"
+                              ItemsSource="{x:Static viewmodels:CatalogueTabVM.SortOptions}"
+                              DisplayMemberPath="ModeName" SelectedIndex="0"
+                              Style="{StaticResource ComboBoxStyle}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding CatalogueSortOnSelectionChangedCmd}"
+                                                       CommandParameter="{Binding ElementName=CatalogueSortCB}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                            Margin="20">
+                        <CheckBox IsChecked="{Binding InStockOnlySearch}"
+                              Style="{StaticResource CheckBoxStyle}">
+                            <Label Content="Толькі ў наяўнасці"
+                               Style="{StaticResource WrapLabelStyle}"/>
+                        </CheckBox>
+                    </StackPanel>
+                </WrapPanel>
+
+                <WrapPanel Orientation="Horizontal" Margin="10,-10,10,20">
+                    <WrapPanel.Style>
+                        <Style TargetType="{x:Type WrapPanel}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=ExpandSearchToggleBtn, Path=IsChecked}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=ExpandSearchToggleBtn, Path=IsChecked}" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </WrapPanel.Style>
+                    <StackPanel MinWidth="300">
+                        <StackPanel Margin="10,5">
+                            <Label Content="Назва / ISBN" Style="{StaticResource LabelCaptionStyle}"/>
+                            <TextBox Text="{Binding TitleSearch, UpdateSourceTrigger=PropertyChanged}" 
+                             Style="{StaticResource InputBoxStyle}"
+                             HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+                        <StackPanel Margin="10,5">
+                            <Label Style="{StaticResource LabelCaptionStyle}" Content="Аўтар_ка"/>
+                            <TextBox Text="{Binding AuthorSearch, UpdateSourceTrigger=PropertyChanged}" 
+                             Style="{StaticResource InputBoxStyle}"
+                             HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel MinWidth="300">
+                        <StackPanel Margin="10,5">
+                            <Label Content="Тэгі" Style="{StaticResource LabelCaptionStyle}"/>
+                            <TextBox Text="{Binding TagsSearch, UpdateSourceTrigger=PropertyChanged}" 
+                             Style="{StaticResource InputBoxStyle}"
+                             HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+                        <StackPanel Margin="10,5">
+                            <Label Content="Цана" Style="{StaticResource LabelCaptionStyle}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="ад" Style="{StaticResource WrapLabelStyle}"
+                                   Width="40" HorizontalContentAlignment="Center"/>
+                                <xctk:DecimalUpDown x:Name="MinPriceSearchDUP"
+                                    Style="{StaticResource CurrencyUpDownStyle}"
+                                    Width="150"
+                                    Value="{Binding MinPriceSearch, Converter={x:Static conv:ConvertersStore.NumberUpDownValueConverter}, ConverterParameter={StaticResource ZeroDec}}"
+                                    Minimum="0"
+                                    Maximum="{x:Static l:Constants.MaxBookPrice}"/>
+                                <Label Content="да" Style="{StaticResource WrapLabelStyle}"
+                                   Width="40" HorizontalContentAlignment="Center"/>
+                                <xctk:DecimalUpDown
+                                    Style="{StaticResource CurrencyUpDownStyle}"
+                                    Width="150"
+                                    Value="{Binding MaxPriceSearch, Converter={x:Static conv:ConvertersStore.NumberUpDownValueConverter}, ConverterParameter={x:Static l:Constants.MaxBookPrice}}"
+                                    Minimum="{Binding Value, ElementName=MinPriceSearchDUP}"
+                                    Maximum="{x:Static l:Constants.MaxBookPrice}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel MinWidth="300">
+                        <StackPanel Margin="10,5">
+                            <Label Content="Выдавецтва" Style="{StaticResource LabelCaptionStyle}"/>
+                            <TextBox Text="{Binding PublisherSearch, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{StaticResource InputBoxStyle}"
+                                 HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+                        <StackPanel Margin="10,5">
+                            <Label Content="Год выдання" Style="{StaticResource LabelCaptionStyle}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="з" Style="{StaticResource WrapLabelStyle}"
+                                   Width="40" HorizontalContentAlignment="Center"/>
+                                <xctk:ShortUpDown x:Name="MinYearSearchSUD" Style="{StaticResource IntUpDownStyle}"
+                                    Width="140" 
+                                    Value="{Binding MinYearSearch, Converter={x:Static conv:ConvertersStore.NumberUpDownValueConverter}, ConverterParameter={StaticResource ZeroSh}}"
+                                    Minimum="0"
+                                    Maximum="{x:Static l:Constants.MaxBookYear}"/>
+                                <Label Content="па" Style="{StaticResource WrapLabelStyle}"
+                                   Width="40" HorizontalContentAlignment="Center"/>
+                                <xctk:ShortUpDown DockPanel.Dock="Left" Style="{StaticResource IntUpDownStyle}"
+                                    Width="140"
+                                    Value="{Binding MaxYearSearch, Converter={x:Static conv:ConvertersStore.NumberUpDownValueConverter}, ConverterParameter={x:Static l:Constants.MaxBookYear}}"
+                                    Minimum="{Binding Value, ElementName=MinYearSearchSUD}"
+                                    Maximum="{x:Static l:Constants.MaxBookYear}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </WrapPanel>
+            </DockPanel>
+        </Border>
+
+        <ScrollViewer Style="{StaticResource ScrollerStyle}">
+            <Border Style="{StaticResource ContentBorderStyle}">
+                <StackPanel>
+                    <StackPanel>
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ContentIsEmpty}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <ListView x:Name="BooksLV" ItemsSource="{Binding Books}" 
+                                  Style="{StaticResource ListViewStyle}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction 
+                                        Command="{Binding CatalogueOnSelectionChangedCmd}"
+                                        CommandParameter="{Binding ElementName=BooksLV}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource ItemBorderStyle}">
+                                        <DockPanel>
+                                            <Image Source="{Binding Image}" Style="{StaticResource ItemImgStyle}" DockPanel.Dock="Top"/>
+                                            <Label Content="{Binding Title}" Style="{StaticResource ItemTitleStyle}" DockPanel.Dock="Top"/>
+                                            <Label Content="{Binding Author}" Style="{StaticResource ItemAuthorStyle}" DockPanel.Dock="Top"/>
+                                            <Label Content="Няма ў наяўнасці" DockPanel.Dock="Bottom">
+                                                <Label.Style>
+                                                    <Style TargetType="Label" BasedOn="{StaticResource NotInStockLabelStyle}">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Count}" Value="0">
+                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Label.Style>
+                                            </Label>
+                                            <DockPanel DockPanel.Dock="Bottom">
+                                                <Label DockPanel.Dock="Left" Style="{StaticResource ItemPriceStyle}"
+                                                       HorizontalAlignment="Left">
+                                                    <TextBlock Text="{Binding Price, StringFormat=C, ConverterCulture={x:Static l:Constants.CurrentCulture}}"/>
+                                                </Label>
+                                                <Button DockPanel.Dock="Right" HorizontalAlignment="Right">
+                                                    <Button.Style>
+                                                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionBtnStyle}">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                            <Setter Property="Content">
+                                                                <Setter.Value>
+                                                                    <Image Source="/images/add_to_cart.png" Style="{StaticResource ActionBtnImageStyle}"/>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Setter Property="CommandParameter" Value="{Binding Id}"/>
+                                                            <Setter Property="Command" Value="{Binding Path=DataContext.AddToCartCmd, ElementName=ThisTabContent}"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Path=DataContext.IsAdmin, ElementName=ThisTabContent}" 
+                                                                             Value="True">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Value="True">
+                                                                    <DataTrigger.Binding>
+                                                                        <MultiBinding Converter="{x:Static conv:ConvertersStore.BookIdToIsInCartConverter}">
+                                                                            <Binding Path="DataContext.UserId" ElementName="ThisTabContent"/>
+                                                                            <Binding Path="Id"/>
+                                                                        </MultiBinding>
+                                                                    </DataTrigger.Binding>
+                                                                    <DataTrigger.Setters>
+                                                                        <Setter Property="Content">
+                                                                            <Setter.Value>
+                                                                                <Image Source="/images/remove_from_cart.png" Style="{StaticResource ActionBtnImageStyle}"/>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                        <Setter Property="CommandParameter" Value="{Binding Id}"/>
+                                                                        <Setter Property="Command" Value="{Binding Path=DataContext.RemoveFromCartCmd, ElementName=ThisTabContent}"/>
+                                                                    </DataTrigger.Setters>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                                <Button DockPanel.Dock="Right" Margin="15,0" HorizontalAlignment="Right">
+                                                    <Button.Style>
+                                                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionBtnStyle}">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                            <Setter Property="Content">
+                                                                <Setter.Value>
+                                                                    <Image Source="/images/white_heart.png" Style="{StaticResource ActionBtnImageStyle}"/>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Setter Property="Command" Value="{Binding Path=DataContext.AddToFavouriteCmd, ElementName=ThisTabContent}"/>
+                                                            <Setter Property="CommandParameter" Value="{Binding Id}"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Path=DataContext.IsAdmin, ElementName=ThisTabContent}" 
+                                                                             Value="True">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Value="True">
+                                                                    <DataTrigger.Binding>
+                                                                        <MultiBinding Converter="{x:Static conv:ConvertersStore.BookIdToIsFavouriteConverter}">
+                                                                            <Binding Path="DataContext.UserId" ElementName="ThisTabContent"/>
+                                                                            <Binding Path="Id"/>
+                                                                        </MultiBinding>
+                                                                    </DataTrigger.Binding>
+                                                                    <DataTrigger.Setters>
+                                                                        <Setter Property="Content">
+                                                                            <Setter.Value>
+                                                                                <Image Source="/images/red_heart.png" Style="{StaticResource ActionBtnImageStyle}"/>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                        <Setter Property="CommandParameter" Value="{Binding Id}"/>
+                                                                        <Setter Property="Command" Value="{Binding Path=DataContext.RemoveFromFavouriteCmd, ElementName=ThisTabContent}"/>
+                                                                    </DataTrigger.Setters>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                                <Button Command="{Binding Path=DataContext.EditBookCmd, ElementName=ThisTabContent}" CommandParameter="{Binding Id}" 
+                                                        HorizontalAlignment="Right"
+                                                        DockPanel.Dock="Right">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button" BasedOn="{StaticResource ActionBtnStyle}">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Path=DataContext.IsAdmin, ElementName=ThisTabContent}" 
+                                                                             Value="True">
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                    <Image Source="/images/edit.png" Style="{StaticResource ActionBtnImageStyle}"/>
+                                                </Button>
+                                            </DockPanel>
+                                        </DockPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                        </ListView>
+
+                        <DockPanel LastChildFill="False" Margin="20">
+                            <Button Command="{Binding PrevPageCmd}" IsEnabled="{Binding PrevPageIsAvailable}"
+                                    Content="❮ назад" DockPanel.Dock="Left"
+                                    Style="{StaticResource BtnStyle}"/>
+                            <Button Command="{Binding NextPageCmd}" IsEnabled="{Binding NextPageIsAvailable}" 
+                                    Content="далей ❯" DockPanel.Dock="Right"
+                                    Style="{StaticResource BtnStyle}"/>
+                        </DockPanel>
+                    </StackPanel>
+                    <StackPanel Margin="20,50" HorizontalAlignment="Center">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ContentIsEmpty}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <Image Source="/images/catalogue.png"
+                               Style="{StaticResource NoContentImgStyle}"
+                               Margin="0,0,0,10"/>
+                        <Label Content="Тут нічога няма!" HorizontalAlignment="Center"
+                               Style="{StaticResource NoContentLabelStyle}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

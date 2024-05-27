@@ -1,0 +1,272 @@
+﻿<UserControl x:Class="LibApp.Views.OrdersHistoryTabContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LibApp.Views"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:l="clr-namespace:LibApp" xmlns:conv="clr-namespace:LibApp.Converters"
+             xmlns:viewmodels="clr-namespace:LibApp.ViewModels" xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=viewmodels:OrdersHistoryTabVM}"
+             x:Name="ThisTabContent">
+    <ScrollViewer Style="{StaticResource ScrollerStyle}">
+        <DockPanel FocusManager.FocusedElement="{Binding ElementName=ThisTabContent}"
+                   Margin="80,20,80,50">
+            <WrapPanel DockPanel.Dock="Top">
+                <Border Style="{StaticResource ContentBlockBorderStyle}"
+                    Margin="0,0,20,20"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left">
+                    <StackPanel>
+                        <Label Content="Нумар заказа" Style="{StaticResource LabelCaptionStyle}"/>
+                        <xctk:IntegerUpDown x:Name="MinPriceSearchDUP"
+                                    Style="{StaticResource IntUpDownStyle}"
+                                    HorizontalAlignment="Stretch" 
+                                    Value="{Binding OrderNumberToSearch, Converter={x:Static conv:ConvertersStore.NumberUpDownValueConverter}, ConverterParameter={x:Null}}"
+                                    Minimum="1"
+                                    Margin="0,0,0,5"/>
+                        <Label Content="Дата" Style="{StaticResource LabelCaptionStyle}"/>
+                        <DatePicker SelectedDate="{Binding OrderDateToSearch, UpdateSourceTrigger=PropertyChanged}"
+                                    Style="{StaticResource DatePickerStyle}"
+                            HorizontalAlignment="Stretch"
+                            Margin="0,0,0,20"/>
+                        
+                        <ListView x:Name="OrdersLV" ItemsSource="{Binding OrdersList}" 
+                                  ScrollViewer.CanContentScroll="True"
+                                  BorderThickness="1" Background="White"
+                                  Margin="0,0,0,10"
+                                  FontSize="16">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding OrdersListOnSelectionChangedCmd}"
+                                               CommandParameter="{Binding ElementName=OrdersLV}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <ListView.View>
+                                <GridView>
+                                    <GridView.ColumnHeaderContainerStyle>
+                                        <Style TargetType="GridViewColumnHeader">
+                                            <Setter Property="IsEnabled" Value="False"/>
+                                        </Style>
+                                    </GridView.ColumnHeaderContainerStyle>
+                                    <GridViewColumn Header="">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Width="30" Height="30" Stretch="Uniform"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                       Tag="{Binding IdStatusNavigation.Name, Mode=OneWay}">
+                                                    <Image.Style>
+                                                        <Style TargetType="Image">
+                                                            <Setter Property="Source" Value="/images/order_statuses/processing.png"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="{x:Static l:Constants.ShippedOrderStatusName}">
+                                                                    <Setter Property="Source" Value="/images/order_statuses/shipped.png"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="{x:Static l:Constants.DeliveredOrderStatusName}">
+                                                                    <Setter Property="Source" Value="/images/order_statuses/delivered.png"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="{x:Static l:Constants.CanceledOrderStatusName}">
+                                                                    <Setter Property="Source" Value="/images/order_statuses/canceled.png"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="{x:Static l:Constants.ReturnedOrderStatusName}">
+                                                                    <Setter Property="Source" Value="/images/order_statuses/returned.png"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Дата" DisplayMemberBinding="{Binding Date, StringFormat=dd.MM.yyyy}"/>
+                                    <GridViewColumn Header="Нумар заказа" DisplayMemberBinding="{Binding Id}" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        <DockPanel LastChildFill="False">
+                            <Button Command="{Binding PrevOrdersPageCmd}" IsEnabled="{Binding PrevOrdersPageIsAvailable}" 
+                            Content="❮ назад" DockPanel.Dock="Left"
+                            Style="{StaticResource BtnStyle}" Margin="0,0,10,0"/>
+                            <Button Command="{Binding NextOrdersPageCmd}" IsEnabled="{Binding NextOrdersPageIsAvailable}" 
+                            Content="далей ❯" DockPanel.Dock="Right"
+                            Style="{StaticResource BtnStyle}"/>
+                        </DockPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Margin="0,0,20,20"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left">
+                    <Border.Style>
+                        <Style TargetType="Border" BasedOn="{StaticResource ContentBlockBorderStyle}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrOrder.Id}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <StackPanel MaxWidth="600">
+                        <WrapPanel Margin="0,0,0,10">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Заказ №" Style="{StaticResource LabelSubHeadingStyle}"/>
+                                <Label Content="{Binding CurrOrder.Id}" Style="{StaticResource LabelSubHeadingStyle}"/>
+                                <Label Content=":" Style="{StaticResource LabelSubHeadingStyle}"/>
+                            </StackPanel>
+
+                            <Label Content="{Binding CurrOrder.IdStatusNavigation, Converter={x:Static conv:ConvertersStore.OrderStatusToStringConverter}}">
+                                <Label.Style>
+                                    <Style TargetType="Label" BasedOn="{StaticResource WrapLabelStyle}">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsAdmin}" Value="True">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
+                            <ComboBox x:Name="OrderStatusCB"
+                                      ItemsSource="{Binding OrderStatuses}"
+                                      SelectedItem="{Binding CurrOrder.IdStatusNavigation, Mode=OneWay}">
+                                <ComboBox.Style>
+                                    <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxStyle}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Setter Property="IsEnabled" Value="True"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsAdmin}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding CurrOrder.Id}" Value="{x:Null}">
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ComboBox.Style>
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={x:Static conv:ConvertersStore.OrderStatusToStringConverter}}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="SelectionChanged">
+                                        <i:InvokeCommandAction Command="{Binding OrderStatusOnSelectionChangedCmd}"
+                                                   CommandParameter="{Binding ElementName=OrderStatusCB}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
+                        </WrapPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Дата:" Style="{StaticResource LabelPropStyle}"/>
+                            <Label Style="{StaticResource BaseLabelStyle}">
+                                <TextBlock Text="{Binding CurrOrder.Date, StringFormat=dd.MM.yyyy}"/>
+                            </Label>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Кошт:" Style="{StaticResource LabelPropStyle}"/>
+                            <Label Style="{StaticResource BaseLabelStyle}">
+                                <TextBlock Text="{Binding CurrOrderCost, StringFormat=C, ConverterCulture={x:Static l:Constants.CurrentCulture}}"/>
+                            </Label>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Імя:" Style="{StaticResource LabelPropStyle}"/>
+                            <Label Content="{Binding CurrOrder.Name}" Style="{StaticResource WrapLabelStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Email:" Style="{StaticResource LabelPropStyle}"/>
+                            <Label Content="{Binding CurrOrder.Email}" Style="{StaticResource WrapLabelStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Адрас:" Style="{StaticResource LabelPropStyle}"/>
+                            <Label Content="{Binding CurrOrder.Address}" Style="{StaticResource WrapLabelStyle}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,5,0,0">
+                            <Label Content="Каментар" Style="{StaticResource LabelPropStyle}"/>
+                            <Label AllowDrop="True" Content="{Binding CurrOrder.Comment}" Style="{StaticResource WrapLabelStyle}"
+                                   Background="White" Padding="10"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <StackPanel Margin="40,50">
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrOrder.Id}" Value="0">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <Image Source="/images/orders_history.png"
+                               Style="{StaticResource NoContentImgStyle}"
+                               Margin="0,0,0,10"/>
+                    <Label Content="Заказ не абраны" HorizontalAlignment="Center"
+                               Style="{StaticResource NoContentLabelStyle}"/>
+                </StackPanel>
+            </WrapPanel>
+            
+            <Border Margin="0" HorizontalAlignment="Stretch">
+                <Border.Style>
+                    <Style TargetType="Border" BasedOn="{StaticResource ContentBorderStyle}">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CurrOrder.Id}" Value="0">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <StackPanel>
+                    <ListView x:Name="OrderBooksLV" ItemsSource="{Binding OrderBooks}" 
+                                       Style="{StaticResource ListViewStyle}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding OrderBooksOnSelectionChangedCmd}"
+                                                   CommandParameter="{Binding ElementName=OrderBooksLV}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource ItemBorderStyle}">
+                                    <StackPanel>
+                                        <Image Source="{Binding IdBookNavigation.Image}" Style="{StaticResource ItemImgStyle}" DockPanel.Dock="Top"/>
+                                        <Label Content="{Binding IdBookNavigation.Title}" Style="{StaticResource ItemTitleStyle}" DockPanel.Dock="Top"/>
+                                        <Label Content="{Binding IdBookNavigation.Author}" Style="{StaticResource ItemAuthorStyle}" DockPanel.Dock="Top"/>
+                                        <DockPanel>
+                                            <Label DockPanel.Dock="Left" Style="{StaticResource ItemPriceStyle}"
+                                                       HorizontalAlignment="Left">
+                                                <TextBlock Text="{Binding Price, StringFormat=C, ConverterCulture={x:Static l:Constants.CurrentCulture}}"/>
+                                            </Label>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                                                <Label Content="{Binding Count}" Style="{StaticResource BaseLabelStyle}"/>
+                                                <Label Content="шт." Style="{StaticResource WrapLabelStyle}"/>
+                                            </StackPanel>
+                                        </DockPanel>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                    </ListView>
+
+                    <DockPanel LastChildFill="False" Margin="20">
+                        <Button Command="{Binding PrevPageCmd}" IsEnabled="{Binding PrevPageIsAvailable}"
+                                    Content="❮ назад" DockPanel.Dock="Left"
+                                    Style="{StaticResource BtnStyle}"/>
+                        <Button Command="{Binding NextPageCmd}" IsEnabled="{Binding NextPageIsAvailable}" 
+                                    Content="далей ❯" DockPanel.Dock="Right"
+                                    Style="{StaticResource BtnStyle}"/>
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+        </DockPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,7 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=netstandard">
+    <s:Int16 x:Key="ZeroSh">0</s:Int16>
+    <s:Int32 x:Key="Zero">0</s:Int32>
+    <s:Decimal x:Key="ZeroDec">0</s:Decimal>
+</ResourceDictionary>

@@ -1,0 +1,115 @@
+﻿<Window x:Class="LibApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LibApp"
+        mc:Ignorable="d"
+        Title="Bookstore"
+        WindowState="Maximized"
+        MinWidth="700" MinHeight="200"
+        xmlns:views="clr-namespace:LibApp.Views"
+        WindowStartupLocation="CenterScreen"
+        xmlns:viewmodels="clr-namespace:LibApp.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainVM}"
+        Icon="/images/icon.png">
+    <Grid>
+        <TabControl Background="White">
+            <TabItem x:Name="CatalogueTabAU" Style="{StaticResource TabStyle}">
+                <TabItem.Header>
+                    <TextBlock Text="Каталог" Style="{StaticResource TabHeaderTextStyle}"/>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <views:CatalogueTabContent x:Name="CatalogueTabAUContent"/>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="BookEditTabA" Style="{StaticResource TabStyle}"
+                     Visibility="Collapsed">
+                <TabItem.Header>
+                    <TextBlock Text="Рэдагаванне" Style="{StaticResource TabHeaderTextStyle}"/>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <views:BookEditTabContent x:Name="BookEditTabAContent"/>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="BookAddTabA" Style="{StaticResource TabStyle}">
+                <TabItem.Header>
+                    <TextBlock Text="Даданне" Style="{StaticResource TabHeaderTextStyle}"/>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <views:BookAddTabContent x:Name="BookAddTabAContent"/>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="FavouriteTabU" Style="{StaticResource TabStyle}">
+                <TabItem.Header>
+                    <TextBlock Text="Абранае" Style="{StaticResource TabHeaderTextStyle}"/>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <views:FavouriteTabContent x:Name="FavouriteTabUContent"/>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="CartTabU" Style="{StaticResource TabStyle}">
+                <TabItem.Header>
+                    <TextBlock Text="Кошык" Style="{StaticResource TabHeaderTextStyle}"/>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <views:CartTabContent x:Name="CartTabUContent"/>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="OrdersHistoryTabAU" Style="{StaticResource TabStyle}">
+                <TabItem.Header>
+                    <TextBlock Text="Заказы" Style="{StaticResource TabHeaderTextStyle}"/>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <views:OrdersHistoryTabContent x:Name="OrdersHistoryTabAUContent"/>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="AboutTabU" Style="{StaticResource TabStyle}">
+                <TabItem.Header>
+                    <TextBlock Text="Пра нас" Style="{StaticResource TabHeaderTextStyle}"/>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <views:AboutTabContent x:Name="AboutTabAUContent"/>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="AccountTabAU" Style="{StaticResource TabStyle}">
+                <TabItem.Header>
+                    <TextBlock Text="Акаўнт" Style="{StaticResource TabHeaderTextStyle}"/>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <views:AccountTabContent x:Name="AccountTabAUContent"/>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="BookInfoTabU" Style="{StaticResource TabStyle}"
+                     Visibility="Collapsed">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Кніга" Style="{StaticResource TabHeaderTextStyle}"/>
+                        <Button Command="{Binding CloseTabCmd}" CommandParameter="{Binding ElementName=BookInfoTabU}"
+                                Style="{StaticResource CloseTabBtnStyle}">
+                            <Image Style="{StaticResource CloseTabImgStyle}"/>
+                        </Button>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <views:BookInfoTabContent x:Name="BookInfoTabUContent"/>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="OrderingTabU" Style="{StaticResource TabStyle}" 
+                     Visibility="Collapsed">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Афармленне заказа" Style="{StaticResource TabHeaderTextStyle}"/>
+                        <Button Command="{Binding CloseTabCmd}" CommandParameter="{Binding ElementName=OrderingTabU}"
+                                Style="{StaticResource CloseTabBtnStyle}">
+                            <Image Style="{StaticResource CloseTabImgStyle}"/>
+                        </Button>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <views:OrderingTabContent x:Name="OrderingTabUContent"/>
+                </TabItem.Content>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

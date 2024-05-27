@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="LibApp.Views.OrderingTabContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LibApp.Views" 
+             xmlns:l="clr-namespace:LibApp" xmlns:conv="clr-namespace:LibApp.Converters" 
+             xmlns:viewmodels="clr-namespace:LibApp.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=viewmodels:OrderingTabVM}">
+    <ScrollViewer Style="{StaticResource ScrollerStyle}">
+        <Border Style="{StaticResource ContentBlockBorderStyle}"
+                HorizontalAlignment="Stretch" MaxWidth="600">
+            <StackPanel>
+                <Grid VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Target="{Binding ElementName=NameTB}" Grid.Row="0" Grid.Column="0" 
+                       Content="Імя" Style="{StaticResource WrapLabelStyle}"/>
+                    <TextBox x:Name="NameTB" Grid.Row="0" Grid.Column="1"
+                     Text="{Binding OrderToMake.Name}" Style="{StaticResource InputBoxStyle}"
+                     MaxLength="{x:Static l:Constants.MaxUserNameLength}"/>
+
+                    <Label Target="{Binding ElementName=EmailTB}" Grid.Row="2" Grid.Column="0" 
+                       Content="Email" Style="{StaticResource WrapLabelStyle}"/>
+                    <TextBox x:Name="EmailTB" Grid.Row="2" Grid.Column="1"
+                     Text="{Binding OrderToMake.Email}" Style="{StaticResource InputBoxStyle}"
+                     MaxLength="{x:Static l:Constants.MaxEmailLength}"/>
+
+                    <Label Target="{Binding ElementName=AddressTB}" Grid.Row="4" Grid.Column="0" 
+                       Content="Адрас" Style="{StaticResource WrapLabelStyle}"/>
+                    <TextBox x:Name="AddressTB" Grid.Row="4" Grid.Column="1"
+                         Text="{Binding OrderToMake.Address}" Style="{StaticResource InputBoxStyle}"
+                         MaxLength="{x:Static l:Constants.MaxAddressLength}"/>
+
+                    <Label Target="{Binding ElementName=CommentTB}" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" 
+                       Content="Каментар да заказа" Style="{StaticResource WrapLabelStyle}"/>
+                    <TextBox x:Name="CommentTB" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
+                         Text="{Binding OrderToMake.Comment}" Style="{StaticResource InputBoxStyle}"
+                         AcceptsReturn="True" TextWrapping="Wrap"
+                         MaxLength="{x:Static l:Constants.MaxCommentLength}"/>
+                </Grid>
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,30">
+                    <Label Content="Кошт разам:" Style="{StaticResource WrapLabelStyle}"
+                           FontWeight="DemiBold"/>
+                    <Label Style="{StaticResource BaseLabelStyle}"
+                           FontWeight="DemiBold">
+                        <TextBlock Text="{Binding Cost, StringFormat=C, ConverterCulture={x:Static l:Constants.CurrentCulture}}"/>
+                    </Label>
+                </StackPanel>
+
+                <Label Content="{Binding ErrorMsg}"
+                       Style="{StaticResource ErrLabelStyle}" Margin="0,0,0,30"/>
+
+                <Button Command="{Binding MakeOrderCmd}" Content="Аформіць заказ"
+                        Style="{StaticResource BtnStyle}" HorizontalAlignment="Right"/>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</UserControl>

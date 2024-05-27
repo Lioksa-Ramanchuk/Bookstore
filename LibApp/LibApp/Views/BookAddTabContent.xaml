@@ -1,0 +1,123 @@
+﻿<UserControl x:Class="LibApp.Views.BookAddTabContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:l="clr-namespace:LibApp" xmlns:conv="clr-namespace:LibApp.Converters"
+             xmlns:local="clr-namespace:LibApp.Views" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d"
+             xmlns:viewmodels="clr-namespace:LibApp.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:BookAddTabVM}">
+    <ScrollViewer Style="{StaticResource ScrollerStyle}">
+        <Border Style="{StaticResource ContentBlockBorderStyle}"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top">
+            <StackPanel>
+                <WrapPanel Margin="0,0,0,30">
+                    <StackPanel Margin="10,5">
+                        <Image Source="{Binding BookToAdd.Image}" Margin="0,0,0,10"
+                           Width="250" MaxHeight="200" Stretch="Uniform"/>
+                        <Button Command="{Binding SelectImgCmd}" Style="{StaticResource BtnStyle}"
+                                HorizontalAlignment="Stretch"
+                            Content="Змяніць выяву"/>
+                    </StackPanel>
+
+                    <WrapPanel>
+                        <StackPanel MinWidth="300" MaxWidth="400" Margin="20,0">
+                            <StackPanel Margin="10,5">
+                                <Label Style="{StaticResource LabelCaptionStyle}" Content="Назва"/>
+                                <TextBox MaxLength="{x:Static l:Constants.MaxBookNameLength}" 
+                                     Text="{Binding BookToAdd.Title}" HorizontalAlignment="Stretch"
+                                     Style="{StaticResource InputBoxStyle}"
+                                     TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <StackPanel Margin="10,5">
+                                <Label Style="{StaticResource LabelCaptionStyle}" Content="Аўтар_ка"/>
+                                <TextBox MaxLength="{x:Static l:Constants.MaxBookAuthorLength}" 
+                                         Text="{Binding BookToAdd.Author}" HorizontalAlignment="Stretch"
+                                         Style="{StaticResource InputBoxStyle}"
+                                         TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <StackPanel Margin="10,5">
+                                <Label Style="{StaticResource LabelCaptionStyle}" Content="ISBN"/>
+                                <TextBox MaxLength="{x:Static l:Constants.MaxBookIsbnLength}" 
+                                         Text="{Binding BookToAdd.Isbn}" HorizontalAlignment="Stretch"
+                                         Style="{StaticResource InputBoxStyle}"
+                                         TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <StackPanel Margin="10,5">
+                                <Label Style="{StaticResource LabelCaptionStyle}" Content="Тэгі"/>
+                                <TextBox MaxLength="{x:Static l:Constants.MaxBookTagsLength}" 
+                                         Text="{Binding BookToAdd.Tags}" HorizontalAlignment="Stretch"
+                                         Style="{StaticResource InputBoxStyle}"
+                                         TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <StackPanel Margin="10,5">
+                                <Label Style="{StaticResource LabelCaptionStyle}" Content="Апісанне"/>
+                                <TextBox MaxLength="{x:Static l:Constants.MaxBookDescriptionLength}" 
+                                         Text="{Binding BookToAdd.Description}" HorizontalAlignment="Stretch"
+                                         Style="{StaticResource InputBoxStyle}"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel MinWidth="300" MaxWidth="400" Margin="20,0">
+                            <StackPanel Margin="10,5">
+                                <Label Style="{StaticResource LabelCaptionStyle}" Content="Выдавецтва"/>
+                                <TextBox MaxLength="{x:Static l:Constants.MaxBookPublisherLength}" 
+                                         Text="{Binding BookToAdd.Publisher}" HorizontalAlignment="Stretch"
+                                         Style="{StaticResource InputBoxStyle}"
+                                         TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <StackPanel Margin="10,5">
+                                <Label Style="{StaticResource LabelCaptionStyle}" Content="Год выдання"/>
+                                <xctk:ShortUpDown
+                                    HorizontalAlignment="Stretch"
+                                    Value="{Binding BookToAdd.Year, Converter={x:Static conv:ConvertersStore.NumberUpDownValueConverter}, ConverterParameter={StaticResource ZeroSh}}"
+                                    Minimum="0"
+                                    Maximum="{x:Static l:Constants.MaxBookYear}"
+                                    Style="{StaticResource IntUpDownStyle}"/>
+                            </StackPanel>
+                            <StackPanel Margin="10,5">
+                                <Label Style="{StaticResource LabelCaptionStyle}" Content="Колькасць старонак"/>
+                                <xctk:ShortUpDown
+                                    HorizontalAlignment="Stretch"
+                                    Value="{Binding BookToAdd.Pages, Converter={x:Static conv:ConvertersStore.NumberUpDownValueConverter}, ConverterParameter={StaticResource ZeroSh}}"
+                                    Minimum="0"
+                                    Maximum="{x:Static l:Constants.MaxBookPages}"
+                                    Style="{StaticResource IntUpDownStyle}"/>
+                            </StackPanel>
+                            <StackPanel Margin="10,5">
+                                <Label Style="{StaticResource LabelCaptionStyle}" Content="Цана"/>
+                                <xctk:DecimalUpDown
+                                    HorizontalAlignment="Stretch"
+                                    Value="{Binding BookToAdd.Price, Converter={x:Static conv:ConvertersStore.NumberUpDownValueConverter}, ConverterParameter={StaticResource ZeroDec}}"
+                                    Minimum="0"
+                                    Maximum="{x:Static l:Constants.MaxBookPrice}"
+                                    Style="{StaticResource CurrencyUpDownStyle}"/>
+                            </StackPanel>
+                            <StackPanel Margin="10,5">
+                                <Label Style="{StaticResource LabelCaptionStyle}" Content="Колькасць у наяўнасці"/>
+                                <xctk:IntegerUpDown
+                                    HorizontalAlignment="Stretch"
+                                    Value="{Binding BookToAdd.Count, Converter={x:Static conv:ConvertersStore.NumberUpDownValueConverter}, ConverterParameter={StaticResource Zero}}"
+                                    Minimum="0"
+                                    Maximum="{x:Static l:Constants.MaxBookCount}"
+                                    Style="{StaticResource IntUpDownStyle}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </WrapPanel>
+                </WrapPanel>
+
+                <Label Content="{Binding ErrorMsg}"
+                       HorizontalAlignment="Right"
+                       Style="{StaticResource ErrLabelStyle}" Margin="0,0,0,30"/>
+
+                <Button Command="{Binding AddBookCmd}" Content="Дадаць у каталог"
+                        Style="{StaticResource BtnStyle}" HorizontalAlignment="Right"/>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</UserControl>

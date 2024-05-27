@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="LibApp.Views.AboutTabContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewmodels="clr-namespace:LibApp.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=viewmodels:AboutTabVM}"
+             x:Name="ThisTabContent">
+    <ScrollViewer Style="{StaticResource ScrollerStyle}">
+        <Border Style="{StaticResource ContentBorderStyle}"
+                Background="{StaticResource CLR_LightYellow}" MaxWidth="2000">
+            <StackPanel>
+                <Label Content="Пра нас" Style="{StaticResource LabelPageTitleStyle}"/>
+                <Image Source="/images/books.jpg"
+                       MaxHeight="300" Stretch="UniformToFill"
+                       Margin="0,15"/>
+                <Label Content="Інтэрнэт-кнігарня &quot;Bookstore&quot; прапануе шырокі выбар кніг па беларускай гісторыі і культуры. У нас вы знойдзеце беларускую мастацкую літаратуру як класічную, так і сучасную, а таксама пераклады па-беларуску з іншых моў. Кнігарня мае шырокі выбар дзіцячай літаратуры. Нашай адметнасцю ёсць прапанова старых беларускіх выданняў. Супрацоўнікі кнігарні маюць досвед працы на беларускім кніжным рынку ад 1997 г. Калі вы не знайшлі патрэбнай кнігі, то можна яе заказаць праз наш сайт."
+                       Style="{StaticResource LabelParStyle}"/>
+
+                <Label Content="Індывідуальны прадпрымальнік Раманчук Аляксей Міхайлавіч."
+                       Style="{StaticResource LabelParStyle}"/>
+
+                <Label Content="УНП 101260565"
+                       Style="{StaticResource LabelParStyle}"/>
+
+                <Label Content="Інтэрнэт-крама www.bookstore.by зарэгістраваная ў Гандлёвым рэестры Рэспублікі Беларусь 07.08.2019 г."
+                       Style="{StaticResource LabelParStyle}"/>
+
+                <Label Content="Кантактныя звесткі:" FontWeight="DemiBold"
+                       Style="{StaticResource LabelParStyle}"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Тэлефон:" Style="{StaticResource WrapLabelStyle}"/>
+                    <Label Content="+375-25-800-35-35" Style="{StaticResource WrapLabelStyle}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Email:" Style="{StaticResource WrapLabelStyle}"/>
+                    <Label Content="alesha.rom@gmail.com" Style="{StaticResource WrapLabelStyle}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</UserControl>
